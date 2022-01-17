@@ -14,7 +14,7 @@ spec:
           - key: app
             operator: In #In, NotIn, Exists, DoesNotExist
             values:
-            - blue
+            - yellow
 ---
 apiVersion: v1
 kind: Pod
@@ -33,7 +33,7 @@ spec:
           - key: app
             operator: In
             values:
-            - blue
+            - yellow
       - weight: 2
         preference:
           matchExpressions:
