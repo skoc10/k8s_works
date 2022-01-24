@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-service
-  namespace: mongo-k8s
+  namespace: mongo
 spec:
   selector:
     app: mongodb
@@ -17,7 +17,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb-deployment
-  namespace: mongo-k8s
+  namespace: mongo
   labels:
     app: mongodb
 spec:
@@ -70,7 +70,7 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: mongo-pv
-  namespace: mongo-k8s
+  namespace: mongo
   labels:
     app: mongodb
 spec:
@@ -88,7 +88,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongo-pvc
-  namespace: mongo-k8s
+  namespace: mongo
 spec:
   resources:
     requests:
