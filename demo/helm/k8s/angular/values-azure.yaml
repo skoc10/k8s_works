@@ -8,7 +8,7 @@ backend:
     disablePII: "true"
     healthCheckUrl: https://backend-angular.abpdemo.com/health-status
     connectionStrings:
-      default: "Data Source=angular-st-sqldb.angular-st,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
+      default: "Data Source=angular-st-sqldb,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
     authServer:
       requireHttpsMetadata: "true"
       authority: https://backend-angular.abpdemo.com
@@ -25,7 +25,7 @@ backend:
 dbmigrator:
   config:
     connectionStrings:
-      default: "Data Source=angular-st-sqldb.angular-st,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
+      default: "Data Source=angular-st-sqldb,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
     openIddictApplications:
       azureAppsAngularAppRootUrl: "https://web-angular.abpdemo.com"
       azureAppsAngularSwaggerRootUrl: "https://backend-angular.abpdemo.com"
