@@ -1,6 +1,6 @@
 config:
   connectionStrings:
-    default: "Data Source=demo-ms-sqldb.demo-ms,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
+    default: "Data Source=angular-st-sqldb.angular-st,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
   openIddictApplications:
     azureAppsAngularAppRootUrl: "https://web-angular.abpdemo.com"
     azureAppsAngularSwaggerRootUrl: "https://backend-angular.abpdemo.com"
