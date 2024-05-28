@@ -1,0 +1,21 @@
+config:
+  selfUrl: https://backend-angular.abpdemo.com
+  angularUrl: https://web-angular.abpdemo.com
+  corsOrigins: https://web-angular.abpdemo.com
+  redirectAllowedUrls: https://web-angular.abpdemo.com
+  disablePII: "true"
+  healthCheckUrl: https://backend-angular.abpdemo.com/health-status
+  connectionStrings:
+    default: "Data Source=demo-ms-sqldb.demo-ms,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
+  authServer:
+    requireHttpsMetadata: "true"
+    authority: https://backend-angular.abpdemo.com
+  dotnetEnv: "Production"
+  aspnetCoreUrls: "http://+:80;"
+  redisHost: angular-st-redis
+  stringEncryptionDefaultPassPhrase: gsKnGZ041HLL4IM8
+ingress:
+  host: backend-angular.abpdemo.com
+image:
+  repository: volosoft.azurecr.io/demo-angular-apppro/backend
+  tag: 0.0.3

@@ -1,0 +1,12 @@
+config:
+  connectionStrings:
+    default: "Data Source=demo-ms-sqldb.demo-ms,1433;Database=angular;User Id=sa;Password=myPassw@rd;TrustServerCertificate=True;"
+  openIddictApplications:
+    azureAppsAngularAppRootUrl: "https://web-angular.abpdemo.com"
+    azureAppsAngularSwaggerRootUrl: "https://backend-angular.abpdemo.com"
+  redisConfiguration: "angular-st-redis"
+image:
+  repository: volosoft.azurecr.io/demo-angular-apppro/migration
+  tag: 0.0.2
+  pullPolicy: IfNotPresent
+

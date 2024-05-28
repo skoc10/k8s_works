@@ -1,0 +1,15 @@
+config:
+  selfUrl: https://web-angular.abpdemo.com
+  authServer:
+    authority: https://backend-angular.abpdemo.com
+    requireHttpsMetadata: "false"
+    responseType: "code"
+    strictDiscoveryDocumentValidation: false
+    skipIssuerCheck: true
+ingress:
+  host: web-angular.abpdemo.com 
+image:
+  repository: volosoft.azurecr.io/demo-angular-apppro/frontend
+  tag: 0.0.2
+  pullPolicy: IfNotPresent
+

@@ -1,0 +1,6 @@
+namespace: demo-ms
+name: mssql-data
+sc : "managed-csi"
+pvc:
+    enabled: true
+    size: 8Gi
