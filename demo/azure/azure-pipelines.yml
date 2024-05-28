@@ -4,7 +4,7 @@ trigger:
       - "*.*.*"
 
 variables:
-  dockerRegistryServiceConnection: 'volosoft-reg'
+  dockerRegistryServiceConnection: 'demo-reg'
   buildContextBasePath: '$(Build.SourcesDirectory)'
   tag: $(Build.BuildNumber)
   DOCKER_BUILDKIT: 1
