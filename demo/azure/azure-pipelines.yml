@@ -1,0 +1,139 @@
+trigger:
+  tags:
+    include:
+      - "*.*.*"
+
+variables:
+  dockerRegistryServiceConnection: 'volosoft-reg'
+  buildContextBasePath: '$(Build.SourcesDirectory)'
+  tag: $(Build.BuildNumber)
+  DOCKER_BUILDKIT: 1
+
+pool:
+  name: ubuntu
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: CheckChanges
+    displayName: Check if Angular or ASP.NET Core has changed
+    pool:
+      name: ubuntu
+    steps:
+    - checkout: self
+
+# Migration
+    - task: Docker@2
+      displayName: 'Build Migration Docker image'
+      inputs:
+        command: build
+        repository: demo-angular-apppro/migration
+        dockerfile: $(buildContextBasePath)/aspnet-core/src/Demo.AzureAppsAngular.DbMigrator/Dockerfile.azure
+        buildContext: $(buildContextBasePath)/aspnet-core
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: 'Push Migration Docker image'
+      inputs:
+        command: push
+        repository: demo-angular-apppro/migration
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: HelmDeploy@0
+      displayName: 'Delete Migrator'
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceConnection: 'aks-demoms'
+        namespace: 'angular'
+        command: delete
+        arguments: dbmigrator
+      continueOnError: true
+
+    - task: HelmDeploy@0
+      displayName: 'Deploy Migration to AKS'
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceConnection: 'aks-demoms'
+        namespace: 'angular'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(buildContextBasePath)/aspnet-core/etc/k8s/angular/charts/dbmigrator'
+        releaseName: 'dbmigrator'
+        overrideValues: 'image.tag=$(tag)'
+        valueFile: '$(buildContextBasePath)/aspnet-core/etc/k8s/angular/charts/dbmigrator/values.yaml'
+        waitForExecution: false
+
+# Backend
+    - task: Docker@2
+      displayName: 'Build Backend Docker image'
+      inputs:
+        command: build
+        repository: demo-angular-apppro/backend
+        dockerfile: $(buildContextBasePath)/aspnet-core/src/Demo.AzureAppsAngular.HttpApi.Host/Dockerfile.azure
+        buildContext: $(buildContextBasePath)/aspnet-core
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: 'Push Backend Docker image'
+      inputs:
+        command: push
+        repository: demo-angular-apppro/backend
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: HelmDeploy@0
+      displayName: 'Deploy Backend to AKS'
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceConnection: 'aks-demoms'
+        namespace: 'angular'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(buildContextBasePath)/aspnet-core/etc/k8s/angular/charts/backend'
+        releaseName: 'backend'
+        overrideValues: 'image.tag=$(tag)'
+        valueFile: '$(buildContextBasePath)/aspnet-core/etc/k8s/angular/charts/backend/values.yaml'
+        waitForExecution: false
+
+# Frontend
+    - task: Docker@2
+      displayName: 'Build Frontend Docker image'
+      inputs:
+        command: build
+        repository: demo-angular-apppro/frontend
+        dockerfile: $(buildContextBasePath)/angular/Dockerfile.azure
+        buildContext: $(buildContextBasePath)/angular
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: Docker@2
+      displayName: 'Push Frontend Docker image'
+      inputs:
+        command: push
+        repository: demo-angular-apppro/frontend
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - task: HelmDeploy@0
+      displayName: 'Deploy Frontend to AKS'
+      inputs:
+        connectionType: Kubernetes Service Connection
+        kubernetesServiceConnection: 'aks-demoms'
+        namespace: 'angular'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(buildContextBasePath)/aspnet-core/etc/k8s/angular/charts/angular'
+        releaseName: 'frontend'
+        overrideValues: 'image.tag=$(tag)'
+        valueFile: '$(buildContextBasePath)/aspnet-core/etc/k8s/angular/charts/angular/values.yaml'
+        waitForExecution: false
